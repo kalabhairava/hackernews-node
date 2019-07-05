@@ -1,0 +1,17 @@
+{
+  "name": "hackernews-node",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "node_modules/typescript/bin/tsc",
+    "compile": "node_modules/typescript/bin/tsc --watch",
+    "start": "nodemon build/index.js"
+  },
+  "dependencies": {
+    "graphql-yoga": "^1.18.0"
+  },
+  "devDependencies": {
+    "typescript": "^3.5.2"
+  }
+}
