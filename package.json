@@ -6,11 +6,13 @@
   "scripts": {
     "build": "node_modules/typescript/bin/tsc",
     "compile": "node_modules/typescript/bin/tsc --watch",
+    "setup_prisma": "prisma deploy && prisma generate",
     "dev": "nodemon build/index.js",
-    "start": "npm run build && node build/index.js"
+    "start": "npm run setup_prisma && npm run build && node build/index.js"
   },
   "dependencies": {
     "graphql-yoga": "^1.18.0",
+    "prisma": "^1.34.1",
     "prisma-client-lib": "^1.34.0",
     "typescript": "^3.5.2"
   },
