@@ -1,55 +1,29 @@
-const links = [
-  {
-    id: 'link-0',
-    description: 'Test description',
-    url: 'https://www.google.com',
-  },
-];
-
-let id = links.length;
-
 const gqlResolvers = {
   Query: {
     info: () => 'This is the API for Hackernews clone',
-    feed: () => links,
+    feed: (root, args, context) => context.prisma.links(),
   },
   Mutation: {
-    post: (root, args) => {
-      const link = {
-        id: `link-${id++}`,
-        description: args.description,
+    createLink: (root, args, context) =>
+      context.prisma.createLink({
         url: args.url,
+        description: args.description,
+      }),
+
+    updateLink: async (root, args, context) => {
+      const link = await context.prisma.link({id: args.id});
+
+      const data = {
+        description: args.description ? args.description : link.description,
+        url: args.url ? args.url : link.url,
       };
 
-      links.push(link);
-
-      return link;
+      const rest = await context.prisma.updateLink(data, {id: args.id});
+      console.log(rest);
     },
-    updatePost: (root, args) => {
-      const index = links.findIndex(link => link.id === args.id);
-      const post = links[index];
 
-      post.description = args.description ? args.description : post.description;
-      post.url = args.url ? args.url : post.url;
-
-      return post;
-    },
-    deletePost: (root, args) => {
-      const index = links.findIndex(link => link.id === args.id);
-      const res = links.splice(index, 1);
-      console.log({res, args});
-
-      if (res.length === 0) {
-        return false;
-      } else {
-        return true;
-      }
-    },
-  },
-  Link: {
-    id: parent => parent.id,
-    description: parent => parent.description,
-    url: parent => parent.url,
+    deleteLink: (root, args, context) =>
+      context.prisma.deleteLink({id: args.id}),
   },
 };
 
